@@ -1,0 +1,26 @@
+language: generic 
+sudo: required
+
+services:
+    - docker
+
+before_install:
+    - docker build -t geoff/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run -e CI=true geoff/react-test npm test
+
+after_success:
+    - docker build -t geoff/multi-client ./client
+    - docker build -t geoff/multi-nginx ./nginx
+    - docker build -t geoff/multi-server ./server
+    - docker build -t geoff/multi-worker ./worker
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    - docker push geoff/multi-client
+    - docker push geoff/multi-nginx
+    - docker push geoff/multi-server
+    - docker push geoff/multi-worker
+# log into docker
+
+
+# push to docker hub
