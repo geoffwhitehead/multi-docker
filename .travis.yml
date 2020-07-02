@@ -15,12 +15,11 @@ after_success:
     - docker build -t geoff/multi-nginx ./nginx
     - docker build -t geoff/multi-server ./server
     - docker build -t geoff/multi-worker ./worker
+    # log into docker
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    # push to docker hub
     - docker push geoff/multi-client
     - docker push geoff/multi-nginx
     - docker push geoff/multi-server
     - docker push geoff/multi-worker
-# log into docker
 
-
-# push to docker hub
